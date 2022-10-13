@@ -1,0 +1,44 @@
+{% extends "coreHTML.html" %}
+
+
+{% block body %}
+  <div class="input-group">
+    <input type="text" id="category" class="form-control col-3 mr-2">
+    <button id="scrape" class="btn btn-success">Scrape</button>
+    <p id="status" class="ml-4"></p>
+  </div>
+  
+  <div id="result" class="mt-4"></div>
+  
+  <script type="text/javascript">
+    $('#scrape').on('click', () => {
+      $('#status').text('Searching for product...')
+    
+      var category = $('#category').val()
+
+      $.post('/run', {'category': category}, (res) => {
+        
+        $('#status').text('')
+        var content ="<br>"
+        $.each(res.data , function(index, card) { 
+          content = 'tr><td><ul class="list-group list-group-horizontal">'
+          content += '<li class="list-group-item"><img src="'+ card.img_url+'">'
+          content += ''
+          content += ''
+          content += '<h5 class="card-title text-dark" ><strong>' 
+          content +='<a href="'+card.url+'">'
+          content += card.title + '</a></strong></h5>'
+          content += '<h2><bold>' +card.prix +'</bold></h2>'
+          content += '<p class="card-text">' +'</p>'
+          content += '</li></td>'
+          $('#result').append(content)
+        });
+      })
+      content += '</tr>'
+    })
+  </script>
+
+
+  
+
+{% endblock %}
